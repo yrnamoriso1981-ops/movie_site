@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ movie.title }} - Release Date, Rating & Movie Info</title>
+
+    <meta name="description"
+          content="Learn more about {{ movie.title }}, including release date, rating, movie information and where to watch.">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .movie-detail {
+            display: flex;
+            gap: 35px;
+            background: #1b1b1b;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .poster {
+            width: 300px;
+            flex-shrink: 0;
+        }
+
+        .poster img {
+            width: 100%;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .info h1 {
+            margin-top: 0;
+            font-size: 34px;
+        }
+
+        .meta {
+            color: #aaa;
+            margin: 15px 0;
+        }
+
+        .watch {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 25px;
+            background: #e50914;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            .movie-detail {
+                flex-direction: column;
+            }
+
+            .poster {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .info h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a class="back" href="/">← Back to Movies</a>
+
+    <div class="movie-detail">
+
+        <div class="poster">
+            <img
+                src="{{ movie.poster_url }}"
+                alt="{{ movie.title }}"
+            >
+        </div>
+
+        <div class="info">
+
+            <h1>{{ movie.title }}</h1>
+
+            <div class="meta">
+                <strong>Release Date:</strong>
+                {{ movie.release_date }}
+            </div>
+
+            {% if movie.status_or_rating %}
+            <div class="meta">
+                <strong>Rating / Status:</strong>
+                {{ movie.status_or_rating }}
+            </div>
+            {% endif %}
+
+            <h2>About {{ movie.title }}</h2>
+
+            <p>
+                Discover information about {{ movie.title }},
+                including its release details and movie information.
+            </p>
+
+            <a
+                class="watch"
+                href="{{ movie.url }}"
+                target="_blank"
+                rel="nofollow noopener"
+            >
+                WATCH ONLINE
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
