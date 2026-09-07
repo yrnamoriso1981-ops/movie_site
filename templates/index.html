@@ -52,7 +52,7 @@
 
         .movie-link {
             display: block;
-            color: inherit;
+            color: white;
             text-decoration: none;
         }
 
@@ -61,6 +61,7 @@
             height: 270px;
             object-fit: cover;
             display: block;
+            cursor: pointer;
         }
 
         .movie-info {
@@ -71,6 +72,7 @@
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 8px;
+            cursor: pointer;
         }
 
         .movie-meta {
@@ -78,9 +80,12 @@
             font-size: 14px;
         }
 
+        .watch-area {
+            padding: 0 12px 12px 12px;
+        }
+
         .watch {
             display: block;
-            margin-top: 12px;
             padding: 10px;
             text-align: center;
             background: #e50914;
@@ -109,6 +114,7 @@
 
     <article class="movie">
 
+        <!-- Poster and movie information link to our detail page -->
         <a
             class="movie-link"
             href="{{ movie.detail_url }}"
@@ -138,7 +144,8 @@
 
         </a>
 
-        <div class="movie-info">
+        <!-- Watch button goes directly to Cinejoy -->
+        <div class="watch-area">
 
             <a
                 class="watch"
