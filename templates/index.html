@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Movie Site - Latest Movies</title>
-    <meta name="description" content="Discover the latest movies, release dates, ratings and movie information.">
+    <meta name="description"
+          content="Discover the latest movies, release dates, ratings and movie information.">
 
     <style>
         body {
@@ -25,6 +26,10 @@
             margin: 0;
         }
 
+        header p {
+            color: #aaa;
+        }
+
         .movies {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -38,6 +43,17 @@
             background: #1d1d1d;
             border-radius: 8px;
             overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .movie:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-link {
+            display: block;
+            color: inherit;
+            text-decoration: none;
         }
 
         .movie img {
@@ -93,27 +109,40 @@
 
     <article class="movie">
 
-        <img
-            src="{{ movie.poster_url }}"
-            alt="{{ movie.title }}"
+        <a
+            class="movie-link"
+            href="{{ movie.detail_url }}"
         >
+
+            <img
+                src="{{ movie.poster_url }}"
+                alt="{{ movie.title }}"
+                loading="lazy"
+            >
+
+            <div class="movie-info">
+
+                <div class="movie-title">
+                    {{ movie.title }}
+                </div>
+
+                <div class="movie-meta">
+                    {{ movie.release_date }}
+
+                    {% if movie.status_or_rating %}
+                        · {{ movie.status_or_rating }}
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </a>
 
         <div class="movie-info">
 
-            <div class="movie-title">
-                {{ movie.title }}
-            </div>
-
-            <div class="movie-meta">
-                {{ movie.release_date }}
-                {% if movie.status_or_rating %}
-                    · {{ movie.status_or_rating }}
-                {% endif %}
-            </div>
-
             <a
                 class="watch"
-                href="{{ movie.url }}"
+                href="{{ movie.watch_url }}"
                 target="_blank"
                 rel="nofollow noopener"
             >
