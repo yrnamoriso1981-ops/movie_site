@@ -14,6 +14,17 @@ def get_movies():
         reader = csv.DictReader(file)
 
         for movie in reader:
+            movie_url = str(movie["url"])
+
+            # Get Cinejoy movie ID
+            movie_id = movie_url.split("/")[-1].split("-")[0]
+
+            # Create direct watch URL
+            movie["watch_url"] = f"https://cinejoy.to/watch/movie/{movie_id}"
+
+            # Create our own movie detail URL
+            movie["detail_url"] = f"/movie/{movie_id}"
+
             movies.append(movie)
 
     return movies
