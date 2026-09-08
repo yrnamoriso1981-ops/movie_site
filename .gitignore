@@ -1,0 +1,17 @@
+.env
+__pycache__/
+*.pyc
+gcm-diagnose.log
+
+data/*backup*.csv
+data/*before*.csv
+data/*merged_test*.csv
+data/*original*.csv
+data/*tmdb*.csv
+data/new_movies_tmdb.csv
+data/movie_details_updated.csv
+
+movies.csv
+git
+py
+type

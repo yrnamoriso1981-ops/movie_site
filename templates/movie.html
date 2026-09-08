@@ -4,149 +4,573 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ movie.title }} - Release Date, Rating & Movie Info</title>
+    {% if query %}
+    <title>Search: {{ query }} - MovieHub</title>
 
     <meta name="description"
-          content="Learn more about {{ movie.title }}, including release date, rating, movie information and where to watch.">
+          content="Search results for {{ query }} on MovieHub. Find movie information, ratings, release dates and where to watch online.">
+
+    {% else %}
+
+    <title>{{ page_title }} - MovieHub</title>
+
+    <meta name="description"
+          content="Discover movies, ratings, release dates and movie information on MovieHub.">
+
+    {% endif %}
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #111;
-            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b0d10;
+            color: #fff;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
-        .movie-detail {
+        /* NAVBAR */
+
+        .navbar {
+            height: 70px;
             display: flex;
+            align-items: center;
+            padding: 0 5%;
+            background: #080a0d;
+            border-bottom: 1px solid #1c2025;
             gap: 35px;
-            background: #1b1b1b;
-            padding: 25px;
-            border-radius: 10px;
         }
 
-        .poster {
-            width: 300px;
-            flex-shrink: 0;
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-right: 20px;
         }
 
-        .poster img {
+        .logo span {
+            color: #e50914;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        /* SEARCH */
+
+        .search {
+            margin-left: auto;
+            display: flex;
+            width: 320px;
+        }
+
+        .search input {
             width: 100%;
-            border-radius: 8px;
-            display: block;
+            padding: 12px 15px;
+            border: none;
+            outline: none;
+            background: #1b2027;
+            color: white;
+            border-radius: 6px 0 0 6px;
+            font-size: 14px;
         }
 
-        .info h1 {
-            margin-top: 0;
-            font-size: 34px;
+        .search input::placeholder {
+            color: #888;
         }
 
-        .meta {
-            color: #aaa;
-            margin: 15px 0;
-        }
-
-        .watch {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 14px 25px;
+        .search button {
+            width: 48px;
+            border: none;
             background: #e50914;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
+            cursor: pointer;
+            border-radius: 0 6px 6px 0;
+            font-size: 18px;
+        }
+
+        .search button:hover {
+            background: #b20710;
+        }
+
+        /* HERO */
+
+        .hero {
+            padding: 80px 7%;
+            min-height: 430px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #0b0d10 0%,
+                    rgba(11,13,16,.95) 25%,
+                    rgba(11,13,16,.45) 65%,
+                    #0b0d10 100%
+                ),
+
+                radial-gradient(
+                    circle at 70% 40%,
+                    #263747 0%,
+                    #10151b 45%,
+                    #0b0d10 75%
+                );
+
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            line-height: 1;
+            margin: 0 0 20px;
+        }
+
+        .hero h1 span {
+            color: #e50914;
+        }
+
+        .hero-meta {
+            color: #ddd;
+            margin-bottom: 18px;
+        }
+
+        .hero-text {
+            color: #bbb;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .watch-button {
+            display: inline-block;
+            padding: 14px 24px;
+            background: #e50914;
+            border-radius: 6px;
             font-weight: bold;
         }
 
-        .watch:hover {
-            opacity: 0.85;
+        .watch-button:hover {
+            background: #b20710;
         }
 
-        .back {
+        /* CONTENT */
+
+        .content {
+            max-width: 1400px;
+            margin: auto;
+            padding: 45px 5%;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            border-left: 4px solid #e50914;
+            padding-left: 12px;
+            margin-bottom: 25px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 27px;
+        }
+
+        .result-count {
+            margin-left: 12px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* NO RESULTS */
+
+        .no-results {
+            background: #11151a;
+            border-radius: 8px;
+            padding: 45px 25px;
+            text-align: center;
+            color: #aaa;
+        }
+
+        .no-results h3 {
+            color: white;
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .clear-search {
             display: inline-block;
-            margin-bottom: 20px;
-            color: #ccc;
-            text-decoration: none;
+            margin-top: 15px;
+            padding: 11px 20px;
+            background: #e50914;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
         }
 
-        .back:hover {
+        .clear-search:hover {
+            background: #b20710;
+        }
+
+        /* MOVIE GRID */
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 22px;
+        }
+
+        .movie-card {
+            background: #11151a;
+            border-radius: 8px;
+            overflow: hidden;
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.35);
+        }
+
+        .poster {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .movie-info {
+            padding: 12px;
+        }
+
+        .movie-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 9px;
+            line-height: 1.3;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .rating {
+            color: #f5c518;
+            white-space: nowrap;
+        }
+
+        /* FOOTER */
+
+        footer {
+            margin-top: 40px;
+            padding: 40px 5%;
+            background: #080a0d;
+            border-top: 1px solid #1c2025;
+            color: #888;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
             color: white;
         }
 
-        @media (max-width: 700px) {
-            .movie-detail {
-                flex-direction: column;
+        .footer-logo span {
+            color: #e50914;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+
+            .movie-grid {
+                grid-template-columns: repeat(4, 1fr);
             }
 
-            .poster {
-                width: 100%;
-                max-width: 300px;
+            .nav-links {
+                display: none;
             }
 
-            .info h1 {
-                font-size: 28px;
+            .search {
+                width: 280px;
             }
         }
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 0 20px;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            .search {
+                width: 150px;
+            }
+
+            .hero {
+                padding: 55px 25px;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .movie-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .content {
+                padding: 35px 18px;
+            }
+        }
+
     </style>
 </head>
 
 <body>
 
-<div class="container">
 
-    <a class="back" href="/">← Back to Movies</a>
+<!-- NAVIGATION -->
 
-    <div class="movie-detail">
+<header class="navbar">
 
-        <div class="poster">
-            <img
-                src="{{ movie.poster_url }}"
-                alt="{{ movie.title }}"
-            >
+    <a href="/" class="logo">
+        MOVIE<span>HUB</span>
+    </a>
+
+    <nav class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/movies">Movies</a>
+
+        <a href="/latest">Latest</a>
+
+        <a href="/top-rated">Top Rated</a>
+
+    </nav>
+
+
+    <!-- SEARCH -->
+
+    <form class="search" action="/" method="get">
+
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            placeholder="Search movies..."
+            autocomplete="off"
+        >
+
+        <button type="submit">
+            🔍
+        </button>
+
+    </form>
+
+</header>
+
+
+
+<!-- HERO -->
+
+{% if not query and page_title == "Latest Movies" %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Latest <span>Movies</span>
+        </h1>
+
+        <div class="hero-meta">
+            Browse the latest movies, release dates and ratings.
         </div>
 
-        <div class="info">
+        <p class="hero-text">
+            Discover movie information, explore new releases,
+            and find the corresponding online viewing page.
+        </p>
 
-            <h1>{{ movie.title }}</h1>
+        <a class="watch-button" href="#latest">
+            BROWSE MOVIES
+        </a>
 
-            <div class="meta">
-                <strong>Release Date:</strong>
-                {{ movie.release_date }}
-            </div>
+    </div>
 
-            {% if movie.status_or_rating %}
-            <div class="meta">
-                <strong>Rating / Status:</strong>
-                {{ movie.status_or_rating }}
-            </div>
-            {% endif %}
+</section>
 
-            <h2>About {{ movie.title }}</h2>
+{% endif %}
 
-            <p>
-                Discover information about {{ movie.title }},
-                including its release details and movie information.
-            </p>
 
-            <a
-                class="watch"
-                href="{{ movie.watch_url }}"
-                target="_blank"
-                rel="nofollow noopener"
-            >
-                WATCH ONLINE
+
+<!-- MOVIES -->
+
+<main class="content" id="latest">
+
+
+    <!-- SECTION TITLE -->
+
+    <div class="section-title">
+
+        <h2>
+            {{ page_title }}
+        </h2>
+
+
+        {% if query %}
+
+        <span class="result-count">
+
+            {{ movies|length }}
+
+            result{% if movies|length != 1 %}s{% endif %}
+
+        </span>
+
+        {% endif %}
+
+    </div>
+
+
+
+    {% if movies %}
+
+
+    <!-- MOVIE GRID -->
+
+    <div class="movie-grid">
+
+        {% for movie in movies %}
+
+        <div class="movie-card">
+
+            <a href="{{ movie.detail_url }}">
+
+                <img
+                    class="poster"
+                    src="{{ movie.poster_url }}"
+                    alt="{{ movie.title }}"
+                    loading="lazy"
+                >
+
+
+                <div class="movie-info">
+
+                    <div class="movie-title">
+
+                        {{ movie.title }}
+
+                    </div>
+
+
+                    <div class="movie-meta">
+
+                        <span>
+                            {{ movie.release_date }}
+                        </span>
+
+
+                        {% if movie.rating %}
+
+                        <span class="rating">
+
+                            ★ {{ movie.rating }}
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
             </a>
 
         </div>
 
+        {% endfor %}
+
     </div>
 
-</div>
+
+    {% else %}
+
+
+    <!-- NO RESULTS -->
+
+    <div class="no-results">
+
+        <h3>
+            No movies found
+        </h3>
+
+        <p>
+            We couldn't find any movie matching
+            "<strong>{{ query }}</strong>".
+        </p>
+
+        <a class="clear-search" href="/">
+            VIEW ALL MOVIES
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-logo">
+        MOVIE<span>HUB</span>
+    </div>
+
+    <p>
+        Movie information, release dates, ratings and online viewing links.
+    </p>
+
+    <p>
+        © 2026 MovieHub. All rights reserved.
+    </p>
+
+</footer>
+
 
 </body>
 </html>
