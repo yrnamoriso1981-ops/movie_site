@@ -15,7 +15,6 @@ def get_movies():
         reader = csv.DictReader(file)
 
         for movie in reader:
-
             movie_url = str(movie["url"])
 
             # Get Cinejoy movie ID
@@ -51,7 +50,6 @@ def release_date_value(movie):
     ]
 
     for date_format in date_formats:
-
         try:
             return datetime.strptime(date_text, date_format)
         except ValueError:
@@ -90,11 +88,9 @@ def home():
         ]
 
         if exact_matches:
-
             movies = exact_matches
 
         else:
-
             # If no exact match, use partial search
             movies = [
                 movie
@@ -105,7 +101,6 @@ def home():
         page_title = f'Search Results for "{query}"'
 
     else:
-
         page_title = "Latest Movies"
 
     return render_template(
@@ -122,7 +117,6 @@ def latest():
 
     movies = get_movies()
 
-    # Newest release first
     movies = sorted(
         movies,
         key=release_date_value,
@@ -143,7 +137,6 @@ def top_rated():
 
     movies = get_movies()
 
-    # Highest rating first
     movies = sorted(
         movies,
         key=rating_value,
@@ -191,6 +184,13 @@ def movie_detail(movie_id):
             )
 
     return "Movie not found", 404
+
+
+# GOOGLE SEARCH CONSOLE VERIFICATION
+@app.route("/google3efed764d6558e52.html")
+def google_verification():
+
+    return "google-site-verification: google3efed764d6558e52.html"
 
 
 # ROBOTS.TXT
