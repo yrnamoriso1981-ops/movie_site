@@ -1,11 +1,18 @@
 from flask import Flask, render_template, request
 import csv
 import os
+import re
 from datetime import datetime
 
 app = Flask(__name__)
 
 CSV_FILE = os.path.join("data", "movie_details.csv")
+
+
+def extract_movie_id(movie_url):
+    """Extract the numeric CineJoy movie ID from a movie URL."""
+    match = re.search(r"/movie/(\d+)(?:-|/|$)", str(movie_url))
+    return match.group(1) if match else ""
 
 
 def get_movies():
@@ -15,16 +22,18 @@ def get_movies():
         reader = csv.DictReader(file)
 
         for movie in reader:
-            movie_url = str(movie["url"])
+            movie_url = str(movie.get("url", "")).strip()
+            movie_id = extract_movie_id(movie_url)
 
-            # Get Cinejoy movie ID
-            movie_id = movie_url.split("/")[-1].split("-")[0]
-
-            # Direct Cinejoy watch URL
-            movie["watch_url"] = f"https://cinejoy.to/watch/movie/{movie_id}"
-
-            # Our own movie detail URL
-            movie["detail_url"] = f"/movie/{movie_id}"
+            # Build a unique direct CineJoy watch URL for THIS movie.
+            # Example: /movie/1423191-resident-evil-2026
+            # becomes: https://cinejoy.to/watch/movie/1423191
+            if movie_id:
+                movie["watch_url"] = f"https://cinejoy.to/watch/movie/{movie_id}"
+                movie["detail_url"] = f"/movie/{movie_id}"
+            else:
+                movie["watch_url"] = "#"
+                movie["detail_url"] = "#"
 
             movies.append(movie)
 
@@ -173,8 +182,7 @@ def movie_detail(movie_id):
 
     for movie in movies:
 
-        movie_url = str(movie["url"])
-        movie_id_from_url = movie_url.split("/")[-1].split("-")[0]
+        movie_id_from_url = extract_movie_id(movie.get("url", ""))
 
         if movie_id_from_url == str(movie_id):
 
