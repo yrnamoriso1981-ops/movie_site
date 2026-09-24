@@ -244,7 +244,12 @@ def sitemap():
     return xml, 200, {
         "Content-Type": "application/xml"
     }
-
+@app.route("/robots.txt")
+def robots_txt():
+    return """User-agent: *
+Allow: /
+Sitemap: https://movie-site-6cup.onrender.com/sitemap.xml
+""", 200, {"Content-Type": "text/plain"}
 
 # RUN SERVER
 if __name__ == "__main__":
