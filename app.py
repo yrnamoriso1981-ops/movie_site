@@ -26,14 +26,17 @@ def get_movies():
             movie_id = extract_movie_id(movie_url)
 
             # Build a unique direct CineJoy watch URL for THIS movie.
-# Example: /movie/1423191-resident-evil-2026
-# becomes: https://cinejoy.pk/watch/movie/1423191
-if movie_id:
-    movie["watch_url"] = f"https://cinejoy.pk/watch/movie/{movie_id}"
-    movie["detail_url"] = f"/movie/{movie_id}"
-else:
-    movie["watch_url"] = "#"
-    movie["detail_url"] = "#"
+            # Example:
+            # /movie/1423191-resident-evil-2026
+            # becomes:
+            # https://cinejoy.pk/watch/movie/1423191
+
+            if movie_id:
+                movie["watch_url"] = f"https://cinejoy.pk/watch/movie/{movie_id}"
+                movie["detail_url"] = f"/movie/{movie_id}"
+            else:
+                movie["watch_url"] = "#"
+                movie["detail_url"] = "#"
 
             movies.append(movie)
 
@@ -182,7 +185,9 @@ def movie_detail(movie_id):
 
     for movie in movies:
 
-        movie_id_from_url = extract_movie_id(movie.get("url", ""))
+        movie_id_from_url = extract_movie_id(
+            movie.get("url", "")
+        )
 
         if movie_id_from_url == str(movie_id):
 
@@ -203,10 +208,9 @@ def google_verification():
 
 # ROBOTS.TXT
 @app.route("/robots.txt")
-def robots():
+def robots_txt():
 
-    return """
-User-agent: *
+    return """User-agent: *
 Allow: /
 
 Sitemap: https://movie-site-6cup.onrender.com/sitemap.xml
@@ -244,12 +248,7 @@ def sitemap():
     return xml, 200, {
         "Content-Type": "application/xml"
     }
-@app.route("/robots.txt")
-def robots_txt():
-    return """User-agent: *
-Allow: /
-Sitemap: https://movie-site-6cup.onrender.com/sitemap.xml
-""", 200, {"Content-Type": "text/plain"}
+
 
 # RUN SERVER
 if __name__ == "__main__":
