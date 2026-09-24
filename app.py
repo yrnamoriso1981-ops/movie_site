@@ -26,14 +26,14 @@ def get_movies():
             movie_id = extract_movie_id(movie_url)
 
             # Build a unique direct CineJoy watch URL for THIS movie.
-            # Example: /movie/1423191-resident-evil-2026
-            # becomes: https://cinejoy.to/watch/movie/1423191
-            if movie_id:
-                movie["watch_url"] = f"https://cinejoy.to/watch/movie/{movie_id}"
-                movie["detail_url"] = f"/movie/{movie_id}"
-            else:
-                movie["watch_url"] = "#"
-                movie["detail_url"] = "#"
+# Example: /movie/1423191-resident-evil-2026
+# becomes: https://cinejoy.pk/watch/movie/1423191
+if movie_id:
+    movie["watch_url"] = f"https://cinejoy.pk/watch/movie/{movie_id}"
+    movie["detail_url"] = f"/movie/{movie_id}"
+else:
+    movie["watch_url"] = "#"
+    movie["detail_url"] = "#"
 
             movies.append(movie)
 
